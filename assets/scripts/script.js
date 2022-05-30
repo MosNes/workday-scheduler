@@ -171,14 +171,38 @@ var timeChartInit = function(savedTimeBlocks) {
 };
 
 //handler for editing descriptions
-var editHandler = function() {
-    var parentId = $(this)
-    .parent()
-    .attr("id");
-    console.log(parentId);
+var editHandler = function () {
+
+    //creates input field
+    inputField = $('<input>')
+        .attr("type", "text")
+        .addClass("form-control h-100 bg-transparent text-left");
+
+    $(this).replaceWith(inputField);
+};
+
+var searchTimeBlocks = function () {
+
 };
 
 //handler for saving edits
+var saveHandler = function () {
+    //gets the ID of the parent container
+    var parentId = $(this)
+        .closest("div .time-block")
+        .attr("id");
+
+    var text = $("#"+parentId)
+    .children("input")
+    .val()
+    .trim();
+
+    var newDescription = $("<div>")
+    .addClass("description col-5 col-sm-10 p-3")
+    .text(text);
+    
+    parentContainer.children("input").replaceWith(newDescription);
+};
 
 // ------INITIALIZATIONS------
 showCurrentDate();
@@ -188,3 +212,15 @@ timeChartInit(savedTimeBlocks);
 //ToDo: Add event listeners and handlers
 
 timeBlockContainerEl.on("click", "div .description", editHandler);
+
+timeBlockContainerEl.on("click", "div .saveBtn", saveHandler);
+
+//search function to find an object with the matching ID value in the savedTimeBlocks array
+//function obtained from https://stackoverflow.com/questions/8517089/js-search-in-object-values from user epascarello
+// var searchTimeBlocks = function (arr, searchKey) {
+//     return arr.filter(function(obj) {
+//         return Object.keys(obj).some(function(key) {
+//           return obj[key].includes(searchKey);
+//         })
+//       });
+// }
