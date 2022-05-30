@@ -47,15 +47,27 @@ var testBlock2 = {
 
 // ------FUNCTIONS------
 
+//updates the currentDay element on the page to display the current date and time
+var showCurrentDate = function() {
+    todaysDateEl.text(
+        todaysDate.toLocaleString(DateTime.DATETIME_SHORT)
+    );
+}
+
 //creates a single timeBlock element and adds it to the container on the page
-var createTimeBlock = function(timeBlockObj) {
+var createTimeBlock = function (timeBlockObj) {
     //clones a new jQuery timeBlock object from the template
     var newTimeBlockEl = timeBlockEl.clone();
     //sets the ID, Description, and Hour based on the input object
-    newTimeBlockEl.attr("id",timeBlockObj.id);
+    newTimeBlockEl.attr("id", timeBlockObj.id);
     newTimeBlockEl.children(".description").text(timeBlockObj.description);
-    var displayTime = DateTime.fromISO(timeBlockObj.timeSlot).
-    newTimeBlockEl.children(".hour").text(timeBlockObj.timeSlot);
+    var displayTime = DateTime
+        .fromISO(timeBlockObj.timeSlot)
+        .toLocaleString({
+            hour: '2-digit',
+            hourCycle: 'h12'
+        });
+    newTimeBlockEl.children(".hour").text(displayTime);
     //appends the new timeBlock element to the timeBlockContainer element
     timeBlockContainerEl.append(newTimeBlockEl);
 };
@@ -149,5 +161,6 @@ var timeChartInit = function(savedTimeBlocks) {
 };
 
 // ------INITIALIZATIONS------
+showCurrentDate();
 loadTimeBlocks();
 timeChartInit(savedTimeBlocks);
