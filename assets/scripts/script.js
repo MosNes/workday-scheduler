@@ -171,6 +171,12 @@ var timeChartInit = function(savedTimeBlocks) {
 };
 
 //handler for editing descriptions
+var editHandler = function() {
+    var parentId = $(this)
+    .parent()
+    .attr("id");
+    console.log(parentId);
+};
 
 //handler for saving edits
 
@@ -180,3 +186,5 @@ loadTimeBlocks();
 timeChartInit(savedTimeBlocks);
 
 //ToDo: Add event listeners and handlers
+
+timeBlockContainerEl.on("click", "div .description", editHandler);
