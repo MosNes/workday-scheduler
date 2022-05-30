@@ -54,25 +54,36 @@ var createTimeBlock = function(timeBlockObj) {
     //sets the ID, Description, and Hour based on the input object
     newTimeBlockEl.attr("id",timeBlockObj.id);
     newTimeBlockEl.children(".description").text(timeBlockObj.description);
+    var displayTime = DateTime.fromISO(timeBlockObj.timeSlot).
     newTimeBlockEl.children(".hour").text(timeBlockObj.timeSlot);
     //appends the new timeBlock element to the timeBlockContainer element
     timeBlockContainerEl.append(newTimeBlockEl);
 };
 
+//saves the savedTimeBlocks array to local storage
 var saveTimeBlocks = function() {
     var localArray = JSON.stringify(savedTimeBlocks);
-    console.log("Saved", localArray);
     localStorage.setItem('savedTimeBlocks',localArray);
+    console.log("Saved changes to Local Storage");
 };
 
+//loads the savedTimeblocks array from local storage
+//if no array exists in local storage, returns false
 var loadTimeBlocks = function () {
     var localArray = JSON.parse(localStorage.getItem('savedTimeBlocks'));
-    console.log("Loaded", localArray);
-    savedTimeBlocks = localArray;
-}
+    if (localArray){
+        console.log("Loaded timeBlock array from Local Storage");
+        savedTimeBlocks = localArray;
+        return true;
+    }
+    else {
+        console.log("No timeblock array found in Local Storage")
+        return false;
+    }  
+};
 
-//initializes the array of timeBlocks that will be created and eventually added to the DOM
-var timeChartCreator = function(savedTimeBlocks) {
+var createNewArray = function () {
+    console.log("Generating New Array");
 
     //calculate the number of blocks to create based on the starting time
     //and the ending time specified in the global variables
@@ -80,49 +91,63 @@ var timeChartCreator = function(savedTimeBlocks) {
     var start = DateTime.fromISO(startHour);
     //uses luxon to get the difference in hours between the two datetime objects, then get the number of hours from obj.values.hours
     var numBlocks = (end.diff(start, 'hours')).values.hours;
-    
+
+    //creates 1 timeblock object for each timeslot and adds them to the savedTimeBlocks array
+    for (i = 0; i < numBlocks + 1; i++) {
+        //initializes an empty object
+        var newObj = {};
+
+        //creates a new time value by parsing the start hour and adding i hours
+        newTime = DateTime.fromISO(startHour).plus({ hours: i });
+
+        //creates the new timeSlot value by converting it to 00:00 24-hr format
+        newTimeSlot = newTime.toLocaleString({
+            hour: 'numeric',
+            minute: 'numeric',
+            hourCycle: 'h23'
+        })
+        //adds the timeslot value to the newObj
+        newObj.timeSlot = newTimeSlot;
+
+        //generates ID by formatting the new time value into a 00 AM/PM string, then removes the space
+        // e.g. 07AM
+        newId = newTime.toLocaleString({
+            hour: '2-digit',
+            hourCycle: 'h12'
+        }).replace(" ", "");
+
+        //adds the new id to the newObj
+        newObj.id = newId;
+
+        //sets a blank description to the newObj
+        newObj.description = "";
+
+        //adds the newObj to the array of savedTimeBlocks
+        savedTimeBlocks.push(newObj);
+    }
+}
+
+//creates a dom element for each item in the savedTimeBlocks array and adds it to the container
+var createTimeChart = function(savedTimeBlocks) {
+    for (i=0; i<savedTimeBlocks.length; i++){
+        var timeBlockObj = savedTimeBlocks[i];
+        createTimeBlock(timeBlockObj);
+    }
+};
+
+//initializes the array of timeBlocks that will be created and eventually added to the DOM
+var timeChartInit = function(savedTimeBlocks) {
+
     //if savedTimeBlocks is empty, create array of objects 
     if (savedTimeBlocks.length === 0) {
-        console.log("Generating New Array");
-        for (i=0;i<numBlocks+1;i++) {
-            //initializes an empty object
-            var newObj = {};
-
-            //creates a new time value by parsing the start hour and adding i hours
-            newTime = DateTime.fromISO(startHour).plus({hours: i});
-
-            //creates the new timeSlot value by converting it to 00:00 24-hr format
-            newTimeSlot = newTime.toLocaleString({
-                hour: 'numeric',
-                minute: 'numeric',
-                hourCycle: 'h23'
-            })
-            //adds the timeslot value to the newObj
-            newObj.timeSlot = newTimeSlot;
-
-            //generates ID by formatting the new time value into a 00 AM/PM string, then removes the space
-            // e.g. 07AM
-            newId = newTime.toLocaleString({
-                hour:'2-digit',
-                hourCycle: 'h12'
-            }).replace(" ","");
-
-            //adds the new id to the newObj
-            newObj.id = newId;
-
-            //sets a blank description to the newObj
-            newObj.description = "";
-
-            //adds the newObj to the array of savedTimeBlocks
-            savedTimeBlocks.push(newObj);
-        }
+        createNewArray();
+        saveTimeBlocks();
     }
 
-    console.log(savedTimeBlocks);
+    createTimeChart(savedTimeBlocks);
+
 };
 
 // ------INITIALIZATIONS------
-
-createTimeBlock(testBlock);
-createTimeBlock(testBlock2);
-timeChartCreator(savedTimeBlocks);
+loadTimeBlocks();
+timeChartInit(savedTimeBlocks);
