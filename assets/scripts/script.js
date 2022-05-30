@@ -61,6 +61,7 @@ var createTimeBlock = function (timeBlockObj) {
     //sets the ID, Description, and Hour based on the input object
     newTimeBlockEl.attr("id", timeBlockObj.id);
     newTimeBlockEl.children(".description").text(timeBlockObj.description);
+    //sets the background color based on whether the timeslot comes before, during, or after the current time
     var comparedTime = DateTime.fromISO(timeBlockObj.timeSlot);
     if (comparedTime.startOf('hour') < todaysDate.startOf('hour')){
         newTimeBlockEl.addClass('past');
@@ -71,6 +72,7 @@ var createTimeBlock = function (timeBlockObj) {
     else {
         newTimeBlockEl.addClass('present');
     }
+    //formats the timeslot text to a 00 AM/PM format
     var displayTime = comparedTime
         .toLocaleString({
             hour: '2-digit',
@@ -166,10 +168,15 @@ var timeChartInit = function(savedTimeBlocks) {
     }
 
     createTimeChart(savedTimeBlocks);
-
 };
+
+//handler for editing descriptions
+
+//handler for saving edits
 
 // ------INITIALIZATIONS------
 showCurrentDate();
 loadTimeBlocks();
 timeChartInit(savedTimeBlocks);
+
+//ToDo: Add event listeners and handlers
