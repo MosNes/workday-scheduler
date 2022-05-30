@@ -61,8 +61,17 @@ var createTimeBlock = function (timeBlockObj) {
     //sets the ID, Description, and Hour based on the input object
     newTimeBlockEl.attr("id", timeBlockObj.id);
     newTimeBlockEl.children(".description").text(timeBlockObj.description);
-    var displayTime = DateTime
-        .fromISO(timeBlockObj.timeSlot)
+    var comparedTime = DateTime.fromISO(timeBlockObj.timeSlot);
+    if (comparedTime.startOf('hour') < todaysDate.startOf('hour')){
+        newTimeBlockEl.addClass('past');
+    }
+    else if (comparedTime.startOf('hour') > todaysDate.startOf('hour')){
+        newTimeBlockEl.addClass('future');
+    }
+    else {
+        newTimeBlockEl.addClass('present');
+    }
+    var displayTime = comparedTime
         .toLocaleString({
             hour: '2-digit',
             hourCycle: 'h12'
