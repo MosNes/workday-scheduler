@@ -27,7 +27,7 @@ const startHour = "07:00";
 const endHour = "18:00";
 
 //JQuery template for a blank timeBlock element
-var timeBlockEl = $("<div>").addClass("time-block w-100 row d-flex flex-row").html('<div class="hour col-1 p-3">Test hour</div><div class="description col-10 p-3">Test 1</div><div class="save-container col-1"><button class="btn saveBtn w-100 h-100"><i class="fa-solid fa-floppy-disk"></i></button>');
+var timeBlockEl = $("<div>").addClass("time-block w-100 row d-flex flex-nowrap flex-row justify-content-between").html('<div class="hour col-2 col-lg-1 p-3">Test hour</div><div class="description col-5 col-sm-10 p-3">Test 1</div><div class="save-container col-2 col-sm-2 col-md-1 col-lg-1"><button class="btn saveBtn w-100 h-100"><i class="fa-solid fa-floppy-disk"></i></button>');
 
 //placeholder for the array of timeBlock objects to be saved to localStorage
 var savedTimeBlocks = [];
@@ -42,11 +42,12 @@ var testBlock = {
 var testBlock2 = {
     id: "8AM",
     timeSlot: "08:00",
-    description: "This is a sample task."
+    description: "This is a different sample task."
 };
 
 // ------FUNCTIONS------
 
+//creates a single timeBlock element and adds it to the container on the page
 var createTimeBlock = function(timeBlockObj) {
     //clones a new jQuery timeBlock object from the template
     var newTimeBlockEl = timeBlockEl.clone();
@@ -59,8 +60,8 @@ var createTimeBlock = function(timeBlockObj) {
 };
 
 var timeChartCreator = function(savedTimeBlocks) {
-    
-}
+
+};
 
 // ------INITIALIZATIONS------
 
