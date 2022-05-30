@@ -126,5 +126,3 @@ var timeChartCreator = function(savedTimeBlocks) {
 createTimeBlock(testBlock);
 createTimeBlock(testBlock2);
 timeChartCreator(savedTimeBlocks);
-saveTimeBlocks();
-loadTimeBlocks();
