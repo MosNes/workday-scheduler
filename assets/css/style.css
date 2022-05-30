@@ -23,6 +23,7 @@ textarea{
 
 .description{
   white-space: pre-wrap;
+  text-align: left;
 }
 
 .time-block{
@@ -71,6 +72,7 @@ textarea{
   transition: all .3s ease-in-out;
 }
 
-.icon {
-  color: white;
+.save-container {
+  padding-left: 0px;
+  padding-right: 0px;
 }
