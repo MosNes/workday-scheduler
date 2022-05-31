@@ -1,6 +1,6 @@
 # Work Day Scheduler App
 
-Link to deployed app: 
+Link to deployed app: https://mosnes.github.io/workday-scheduler/
 
 ---
 
