@@ -181,8 +181,10 @@ var editHandler = function () {
     $(this).replaceWith(inputField);
 };
 
-var searchTimeBlocks = function () {
-
+// searches the savedTimeBlocks array for the an object with the inputted Id and returns the index of that object
+var searchTimeBlocks = function (inputId) {
+    var index = savedTimeBlocks.findIndex(block => block.id === inputId);
+    return index;
 };
 
 //handler for saving edits
@@ -208,6 +210,7 @@ var saveHandler = function () {
 showCurrentDate();
 loadTimeBlocks();
 timeChartInit(savedTimeBlocks);
+
 
 //ToDo: Add event listeners and handlers
 
