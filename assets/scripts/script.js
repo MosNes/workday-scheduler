@@ -48,7 +48,7 @@ var testBlock2 = {
 // ------FUNCTIONS------
 
 //updates the currentDay element on the page to display the current date and time
-var showCurrentDate = function() {
+var showCurrentDate = function () {
     todaysDateEl.text(
         todaysDate.toLocaleString(DateTime.DATETIME_SHORT)
     );
@@ -63,10 +63,10 @@ var createTimeBlock = function (timeBlockObj) {
     newTimeBlockEl.children(".description").text(timeBlockObj.description);
     //sets the background color based on whether the timeslot comes before, during, or after the current time
     var comparedTime = DateTime.fromISO(timeBlockObj.timeSlot);
-    if (comparedTime.startOf('hour') < todaysDate.startOf('hour')){
+    if (comparedTime.startOf('hour') < todaysDate.startOf('hour')) {
         newTimeBlockEl.addClass('past');
     }
-    else if (comparedTime.startOf('hour') > todaysDate.startOf('hour')){
+    else if (comparedTime.startOf('hour') > todaysDate.startOf('hour')) {
         newTimeBlockEl.addClass('future');
     }
     else {
@@ -84,9 +84,9 @@ var createTimeBlock = function (timeBlockObj) {
 };
 
 //saves the savedTimeBlocks array to local storage
-var saveTimeBlocks = function() {
+var saveTimeBlocks = function () {
     var localArray = JSON.stringify(savedTimeBlocks);
-    localStorage.setItem('savedTimeBlocks',localArray);
+    localStorage.setItem('savedTimeBlocks', localArray);
     console.log("Saved changes to Local Storage");
 };
 
@@ -94,7 +94,7 @@ var saveTimeBlocks = function() {
 //if no array exists in local storage, returns false
 var loadTimeBlocks = function () {
     var localArray = JSON.parse(localStorage.getItem('savedTimeBlocks'));
-    if (localArray){
+    if (localArray) {
         console.log("Loaded timeBlock array from Local Storage");
         savedTimeBlocks = localArray;
         return true;
@@ -102,7 +102,7 @@ var loadTimeBlocks = function () {
     else {
         console.log("No timeblock array found in Local Storage")
         return false;
-    }  
+    }
 };
 
 var createNewArray = function () {
@@ -151,33 +151,38 @@ var createNewArray = function () {
 }
 
 //creates a dom element for each item in the savedTimeBlocks array and adds it to the container
-var createTimeChart = function(savedTimeBlocks) {
-    for (i=0; i<savedTimeBlocks.length; i++){
+var createTimeChart = function (savedTimeBlocks) {
+    for (i = 0; i < savedTimeBlocks.length; i++) {
         var timeBlockObj = savedTimeBlocks[i];
         createTimeBlock(timeBlockObj);
     }
 };
 
 //initializes the array of timeBlocks that will be created and eventually added to the DOM
-var timeChartInit = function(savedTimeBlocks) {
+var timeChartInit = function (savedTimeBlocks) {
 
-    //if savedTimeBlocks is empty, create array of objects 
+    //if savedTimeBlocks is empty, create array of placeholder objects 
     if (savedTimeBlocks.length === 0) {
         createNewArray();
         saveTimeBlocks();
     }
-
+    //create elements from array and append them to the page
     createTimeChart(savedTimeBlocks);
 };
 
 //handler for editing descriptions
 var editHandler = function () {
 
-    //creates input field
+    //get text from description if present
+    var text = $(this).text();
+
+    //creates input field and adds text from description
     inputField = $('<input>')
         .attr("type", "text")
+        .val(text)
         .addClass("form-control h-100 bg-transparent text-left");
 
+    //replaces the description field with an input field
     $(this).replaceWith(inputField);
 };
 
@@ -195,10 +200,10 @@ var saveHandler = function () {
         .attr("id");
 
     //get the text input from the input field and trim whitespace
-    var text = $("#"+parentId)
-    .children("input")
-    .val()
-    .trim();
+    var text = $("#" + parentId)
+        .children("input")
+        .val()
+        .trim();
 
     //get index of the object in the savedTimeBlocks array that matches the parent Id
     var index = searchTimeBlocks(parentId);
@@ -209,20 +214,19 @@ var saveHandler = function () {
 
     //create a new element with the description text
     var newDescription = $("<div>")
-    .addClass("description col-5 col-sm-10 p-3")
-    .text(text);
-    
+        .addClass("description col-5 col-sm-10 p-3")
+        .text(text);
+
     //replace the input element with the new description element
-    $("#"+parentId).children("input").replaceWith(newDescription);
+    $("#" + parentId)
+        .children("input")
+        .replaceWith(newDescription);
 };
 
 // ------INITIALIZATIONS------
 showCurrentDate();
 loadTimeBlocks();
 timeChartInit(savedTimeBlocks);
-
-
-//ToDo: Add event listeners and handlers
 
 timeBlockContainerEl.on("click", "div .description", editHandler);
 
