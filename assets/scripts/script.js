@@ -36,6 +36,9 @@ var savedTimeBlocks = [];
 
 //updates the currentDay element on the page to display the current date and time
 var showCurrentDate = function () {
+    //updates current when called
+    todaysDate = DateTime.now();
+    //displays current time in the currentDay element
     todaysDateEl.text(
         todaysDate.toLocaleString(DateTime.DATETIME_SHORT)
     );
@@ -228,6 +231,9 @@ timeBlockContainerEl.on("click", "div .description", editHandler);
 
 //event listener for save button clicks
 timeBlockContainerEl.on("click", "div .saveBtn", saveHandler);
+
+//updates the date and time at the top of the page every minute
+intervalId = setInterval(showCurrentDate, 60000);
 
 
 //unused search function to find an object with the matching ID value in the savedTimeBlocks array
