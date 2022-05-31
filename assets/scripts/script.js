@@ -167,7 +167,7 @@ var editHandler = function () {
     var text = $(this).text();
 
     //creates input field and adds text from description
-    inputField = $('<input>')
+    inputField = $('<textarea>')
         .attr("type", "text")
         .val(text)
         .addClass("form-control h-100 bg-transparent text-left");
@@ -191,7 +191,7 @@ var saveHandler = function () {
 
     //get the text input from the input field and trim whitespace
     var text = $("#" + parentId)
-        .children("input")
+        .children("textarea")
         .val()
         .trim();
 
@@ -209,7 +209,7 @@ var saveHandler = function () {
 
     //replace the input element with the new description element
     $("#" + parentId)
-        .children("input")
+        .children("textarea")
         .replaceWith(newDescription);
 };
 
