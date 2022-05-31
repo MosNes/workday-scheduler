@@ -27,7 +27,7 @@ const startHour = "07:00";
 const endHour = "18:00";
 
 //JQuery template for a blank timeBlock element
-var timeBlockEl = $("<div>").addClass("time-block w-100 row d-flex flex-nowrap flex-row justify-content-between").html('<div class="hour col-2 col-lg-1 p-3">Test hour</div><div class="description col-5 col-sm-10 p-3">Test 1</div><div class="save-container col-2 col-sm-2 col-md-1 col-lg-1"><button class="btn saveBtn w-100 h-100"><i class="fa-solid fa-floppy-disk"></i></button>');
+var timeBlockEl = $("<div>").addClass("time-block w-100 row d-flex flex-nowrap flex-row justify-content-between").html('<div class="hour col-2 col-lg-1 p-3">Test hour</div><div class="description col-5 col-sm-10 p-3"><p>Test 1</p></div><div class="save-container col-2 col-sm-2 col-md-1 col-lg-1"><button class="btn saveBtn w-100 h-100"><i class="fa-solid fa-floppy-disk"></i></button>');
 
 //placeholder for the array of timeBlock objects to be saved to localStorage
 var savedTimeBlocks = [];
@@ -47,7 +47,7 @@ var createTimeBlock = function (timeBlockObj) {
     var newTimeBlockEl = timeBlockEl.clone();
     //sets the ID, Description, and Hour based on the input object
     newTimeBlockEl.attr("id", timeBlockObj.id);
-    newTimeBlockEl.children(".description").text(timeBlockObj.description);
+    newTimeBlockEl.children(".description").children("p").text(timeBlockObj.description);
 
     //sets the background color based on whether the timeslot comes before, during, or after the current time
     var comparedTime = DateTime.fromISO(timeBlockObj.timeSlot);
@@ -164,7 +164,7 @@ var timeChartInit = function (savedTimeBlocks) {
 var editHandler = function () {
 
     //get text from description if present
-    var text = $(this).text();
+    var text = $(this).children("p").text();
 
     //creates input field and adds text from description
     inputField = $('<textarea>')
@@ -173,7 +173,7 @@ var editHandler = function () {
         .addClass("form-control h-100 bg-transparent text-left");
 
     //replaces the description field with an input field
-    $(this).replaceWith(inputField);
+    $(this).children("p").replaceWith(inputField);
 };
 
 // searches the savedTimeBlocks array for the an object with the inputted Id and returns the index of that object
@@ -189,8 +189,11 @@ var saveHandler = function () {
         .closest("div .time-block")
         .attr("id");
 
+    console.log(parentId);
+
     //get the text input from the input field and trim whitespace
     var text = $("#" + parentId)
+        .children(".description")
         .children("textarea")
         .val()
         .trim();
@@ -203,14 +206,16 @@ var saveHandler = function () {
     saveTimeBlocks();
 
     //create a new element with the description text
-    var newDescription = $("<div>")
-        .addClass("description col-5 col-sm-10 p-3")
-        .text(text);
+    var newDescriptionEl = $("<div>").addClass("description col-5 col-sm-10 p-3");
+
+    var newPEl = $("<p>").text(text);
+
+    newDescriptionEl.append(newPEl);
 
     //replace the input element with the new description element
     $("#" + parentId)
-        .children("textarea")
-        .replaceWith(newDescription);
+        .children(".description")
+        .replaceWith(newDescriptionEl);
 };
 
 // ------INITIALIZATIONS------
