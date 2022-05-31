@@ -4,7 +4,7 @@ Link to deployed app:
 
 ---
 
-![Example Screenshot](./assets/images/Screenshot1.JPG)
+![Example Screenshot](./assets/images/screenshot1.JPG)
 
 
 ## Purpose
