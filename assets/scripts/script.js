@@ -194,16 +194,26 @@ var saveHandler = function () {
         .closest("div .time-block")
         .attr("id");
 
+    //get the text input from the input field and trim whitespace
     var text = $("#"+parentId)
     .children("input")
     .val()
     .trim();
 
+    //get index of the object in the savedTimeBlocks array that matches the parent Id
+    var index = searchTimeBlocks(parentId);
+
+    //update the description property of that object and save the updated array to local storage
+    savedTimeBlocks[index].description = text;
+    saveTimeBlocks();
+
+    //create a new element with the description text
     var newDescription = $("<div>")
     .addClass("description col-5 col-sm-10 p-3")
     .text(text);
     
-    parentContainer.children("input").replaceWith(newDescription);
+    //replace the input element with the new description element
+    $("#"+parentId).children("input").replaceWith(newDescription);
 };
 
 // ------INITIALIZATIONS------
